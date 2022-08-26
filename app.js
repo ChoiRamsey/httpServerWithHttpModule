@@ -56,9 +56,26 @@ const httpRequestListener = function(request, response) {
           email: user.email,
           password: user.password,
         });
-
-        response.end(JSON.stringify({message : "userCreated"}))
+        response.writeHead(200, {'Content-Type' : 'application/json'})
+        response.end(JSON.stringify({"users" : users}))
       })
+    } else if (url === "/post/enrollment") {
+      let body = "";
+    
+      request.on("data", (data) => {
+        body += data;
+      });
+    
+      request.on("end", () => {
+        const post = JSON.parse(body);
+    
+        posts.push({
+          content: post.content,
+          userId: post.userId,
+        });
+        response.writeHead(200, {'Content-Type' : 'application/json'})
+        response.end(JSON.stringify({"posts" : posts}))
+        })
     }
   }
 }
