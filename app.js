@@ -60,18 +60,8 @@ const httpRequestListener = function(request, response) {
         response.end(JSON.stringify({message : "userCreated"}))
       })
     } else if (url === "/post/enrollment") {
-<<<<<<< Updated upstream
-      let body1 = "";
-
-      request.on("data", (data) => {
-        body1 += data;
-      });
-
-=======
       let body = "";
-    
       request.on("data", (data) => {body += data;});
->>>>>>> Stashed changes
       request.on("end", () => {
         const postEnroll = JSON.parse(body1);
 
@@ -82,6 +72,26 @@ const httpRequestListener = function(request, response) {
         response.writeHead(200, {'Content-Type' : 'application/json'})
         response.end(JSON.stringify({"posts" : posts}))
       })
+        response.end(JSON.stringify({"users" : users}))
+      })
+    } else if (url === "/post/enrollment") {
+      let body = "";
+    
+      request.on("data", (data) => {
+        body += data;
+      });
+    
+      request.on("end", () => {
+        const post = JSON.parse(body);
+    
+        posts.push({
+          content: post.content,
+          userId: post.userId,
+        });
+        response.writeHead(200, {'Content-Type' : 'application/json'})
+        response.end(JSON.stringify({"posts" : posts}))
+        })
+
     }
   }
 }
