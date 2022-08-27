@@ -34,19 +34,19 @@ const posts = [
 const httpRequestListener = function(request, response) {
   const {url, method} = request
   
-  if (method === 'GET') {
-    if (url === '/ping') {
+  if (method === "GET") {
+    if (url === "/ping") {
       response.writeHead(200, {'Content-Type' : 'application/json'})
       response.end(JSON.stringify({message : "pong"}))
+    } else if (url === "/post/list") {
+      response.writeHead(200, {'Content-Type' : 'application/json'})
+      response.end(JSON.stringify({"posts" : posts}))
     }
   } else if (method === "POST") {
     if (url === "/users/signup") {
       let body = "";
 
-      request.on("data", (data) => {
-        body += data;
-      });
-
+      request.on("data", (data) => {body += data;});
       request.on("end", () => {
         const user = JSON.parse(body);
 
@@ -60,12 +60,18 @@ const httpRequestListener = function(request, response) {
         response.end(JSON.stringify({message : "userCreated"}))
       })
     } else if (url === "/post/enrollment") {
+<<<<<<< Updated upstream
       let body1 = "";
 
       request.on("data", (data) => {
         body1 += data;
       });
 
+=======
+      let body = "";
+    
+      request.on("data", (data) => {body += data;});
+>>>>>>> Stashed changes
       request.on("end", () => {
         const postEnroll = JSON.parse(body1);
 
@@ -88,4 +94,4 @@ const PORT = 8000
 
 server.listen(PORT, IP, function() {
   console.log(`Listening to request on ip ${IP} & port ${PORT}`)
-})
+});
