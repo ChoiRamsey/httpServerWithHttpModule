@@ -1,5 +1,5 @@
 const http = require("http")
-const server = http.createServer()
+const server = http.createServer() // '.createServer()' 메서드는 http 서버 객체를 반환한다
 
 const users = [
   {
@@ -34,19 +34,19 @@ const posts = [
 const httpRequestListener = function(request, response) {
   const {url, method} = request
   
-  if (method === 'GET') {
-    if (url === '/ping') {
+  if (method === "GET") {
+    if (url === "/ping") {
       response.writeHead(200, {'Content-Type' : 'application/json'})
       response.end(JSON.stringify({message : "pong"}))
+    } else if (url === "/post/list") {
+      response.writeHead(200, {'Content-Type' : 'application/json'})
+      response.end(JSON.stringify({"posts" : posts}))
     }
   } else if (method === "POST") {
     if (url === "/users/signup") {
       let body = "";
 
-      request.on("data", (data) => {
-        body += data;
-      });
-
+      request.on("data", (data) => {body += data;});
       request.on("end", () => {
         const user = JSON.parse(body);
 
@@ -57,6 +57,21 @@ const httpRequestListener = function(request, response) {
           password: user.password,
         });
         response.writeHead(200, {'Content-Type' : 'application/json'})
+        response.end(JSON.stringify({message : "userCreated"}))
+      })
+    } else if (url === "/post/enrollment") {
+      let body = "";
+      request.on("data", (data) => {body += data;});
+      request.on("end", () => {
+        const postEnroll = JSON.parse(body1);
+
+        posts.push({
+          content: postEnroll.content,
+          userId: postEnroll.userId,
+        });
+        response.writeHead(200, {'Content-Type' : 'application/json'})
+        response.end(JSON.stringify({"posts" : posts}))
+      })
         response.end(JSON.stringify({"users" : users}))
       })
     } else if (url === "/post/enrollment") {
@@ -76,15 +91,17 @@ const httpRequestListener = function(request, response) {
         response.writeHead(200, {'Content-Type' : 'application/json'})
         response.end(JSON.stringify({"posts" : posts}))
         })
+
     }
   }
 }
 
-server.on("request", httpRequestListener)
+server.on("request", httpRequestListener) // '.on' 메서드는 최상단 '.createServer()' 메서드 실행 후 반환된 서버 객체가 가지고 있는 메서드
+// 서버 객체에 "request" 이름으로 이벤트가 등록된다
 
 const IP = '127.0.0.1'
 const PORT = 8000
 
 server.listen(PORT, IP, function() {
   console.log(`Listening to request on ip ${IP} & port ${PORT}`)
-})
+});
