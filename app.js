@@ -73,7 +73,7 @@ const httpRequestListener = function(request, response) {
         response.end(JSON.stringify({"posts" : posts}))
       })
         response.end(JSON.stringify({"users" : users}))
-      })
+      }
     } else if (url === "/post/enrollment") {
       let body = "";
     
@@ -94,7 +94,6 @@ const httpRequestListener = function(request, response) {
 
     }
   }
-}
 
 server.on("request", httpRequestListener) // '.on' 메서드는 최상단 '.createServer()' 메서드 실행 후 반환된 서버 객체가 가지고 있는 메서드
 // 서버 객체에 "request" 이름으로 이벤트가 등록된다
